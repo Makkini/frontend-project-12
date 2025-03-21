@@ -1,29 +1,25 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import avatar_1 from '../assets/images/avatar_1.jpg';
+import avatar from '../../assets/images/avatar.jpg';
+import {Link} from "react-router-dom";
 
-const RegistrationCard = () => {
+const LoginCard = ({ onSubmit, error }) => {
   const initialValues = {
     username: '',
     password: '',
-    confirmPassword: '',
   };
 
   const validationSchema = Yup.object({
     username: Yup.string().required('Обязательное поле'),
     password: Yup.string().required('Обязательное поле'),
-    confirmPassword: Yup.string()
-      .oneOf([Yup.ref('password'), null], 'Пароли должны совпадать')
-      .required('Обязательное поле'),
   });
-
 
   return (
     <div className="card shadow-sm">
-      <div className="card-body row p-5">
+      <div className="card-body row p-4">
         <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
-          <img src={avatar_1} className="rounded-circle" alt="Регистрация" />
+          <img src={avatar} className="rounded-circle" alt="Войти" />
         </div>
         <Formik
           initialValues={initialValues}
@@ -31,19 +27,20 @@ const RegistrationCard = () => {
           onSubmit={onSubmit}
         >
           <Form className="col-12 col-md-6 mt-3 mt-md-0">
-            <h1 className="text-center mb-4">Регистрация</h1>
+            <h1 className="text-center mb-4">Войти</h1>
+            {error && <div className="alert alert-danger">{error}</div>}
             <div className="form-floating mb-3">
               <Field
                 name="username"
                 type="text"
                 className="form-control"
-                placeholder="Имя пользователя"
+                placeholder="Ваш ник"
                 id="username"
               />
-              <label htmlFor="username">Имя пользователя</label>
+              <label htmlFor="username">Ваш ник</label>
               <ErrorMessage name="username" component="div" className="text-danger" />
             </div>
-            <div className="form-floating mb-3">
+            <div className="form-floating mb-4">
               <Field
                 name="password"
                 type="password"
@@ -54,30 +51,19 @@ const RegistrationCard = () => {
               <label htmlFor="password">Пароль</label>
               <ErrorMessage name="password" component="div" className="text-danger" />
             </div>
-            <div className="form-floating mb-4">
-              <Field
-                name="confirmPassword"
-                type="password"
-                className="form-control"
-                placeholder="Подтвердите пароль"
-                id="confirmPassword"
-              />
-              <label htmlFor="confirmPassword">Подтвердите пароль</label>
-              <ErrorMessage name="confirmPassword" component="div" className="text-danger" />
-            </div>
             <button type="submit" className="w-100 mb-3 btn btn-outline-primary">
-              Зарегистрироваться
+              Войти
             </button>
           </Form>
         </Formik>
       </div>
       <div className="card-footer p-4">
         <div className="text-center">
-          <span>Уже есть аккаунт?</span> <a href="/login">Войти</a>
+          <span>Нет аккаунта?</span> <Link to="/signup">Регистрация</Link>
         </div>
       </div>
     </div>
   );
 };
 
-export default RegistrationCard;
+export default LoginCard;

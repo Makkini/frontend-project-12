@@ -12,6 +12,7 @@
   "dependencies": {
     "@eslint/eslintrc": "^3.3.0",
     "@hexlet/chat-server": "^2.0.4",
+    "@reduxjs/toolkit": "^2.6.1",
     "axios": "^1.8.4",
     "bootstrap": "^5.3.3",
     "eslint": "^8.57.1",
@@ -24,8 +25,10 @@
     "react-bootstrap-icons": "^1.11.5",
     "react-dom": "^19.0.0",
     "react-i18next": "^15.4.1",
+    "react-redux": "^9.2.0",
     "react-router-dom": "^7.4.0",
     "react-toastify": "^11.0.5",
+    "socket.io-client": "^4.8.1",
     "yup": "^1.6.1"
   },
   "devDependencies": {

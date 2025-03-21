@@ -1,16 +1,20 @@
-import React, {useContext} from 'react';
-import {AuthContext} from "../app/AuthContext.jsx";
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../features/auth/authSlice';
+import {Link} from "react-router-dom";
 
 const Navbar = () => {
-  const { token, logout } = useContext(AuthContext);
+  const { token } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
   const handleLogout = () => {
-    logout();
+    dispatch(logout());
   };
 
   return (
     <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
       <div className="container">
-        <a className="navbar-brand" href="/">Hexlet Chat</a>
+        <Link className="navbar-brand" to="/">Hexlet Chat</Link>
         {token && (
           <button
             type="button"
@@ -19,7 +23,8 @@ const Navbar = () => {
           >
             Выйти
           </button>
-        )}      </div>
+        )}
+      </div>
     </nav>
   );
 };

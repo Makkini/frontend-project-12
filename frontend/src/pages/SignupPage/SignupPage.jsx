@@ -1,5 +1,5 @@
 import React from 'react';
-import RegistrationCard from "../../components/RegistrationCard.jsx";
+import RegistrationCard from "../../components/FormCards/RegistrationCard.jsx";
 
 const SignupPage = () => {
   return (

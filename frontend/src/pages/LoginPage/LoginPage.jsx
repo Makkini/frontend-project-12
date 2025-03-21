@@ -1,19 +1,20 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { AuthContext } from '../../app/AuthContext.jsx';
-import LoginCard from '../../components/LoginCard.jsx';
+import {login} from "../../features/auth/authSlice.js";
+import LoginCard from "../../components/FormCards/LoginCard.jsx";
 
 const LoginPage = () => {
   const [error, setError] = useState('');
-  const { login } = useContext(AuthContext);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
     try {
       const response = await axios.post('/api/v1/login', values);
       const { token } = response.data;
-      login(token);
+      dispatch(login(token));
       navigate('/');
     } catch (err) {
       setError('Неверные имя пользователя или пароль');
