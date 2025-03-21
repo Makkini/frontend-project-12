@@ -8,7 +8,7 @@ import socket from '../../services/socket.js';
 const ChatPage = () => {
   const dispatch = useDispatch();
   const { messages, channels, currentChannelId, loading, error } = useSelector((state) => state.chat);
-
+  const { username } = useSelector((state) => state.auth)
   useEffect(() => {
     dispatch(fetchChannels());
     dispatch(fetchMessages());
@@ -31,7 +31,7 @@ const ChatPage = () => {
     const message = {
       body: messageBody,
       channelId: currentChannelId,
-      username: 'admin',
+      username: username,
     };
     dispatch(sendMessage(message));
   };
