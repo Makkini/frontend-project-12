@@ -2,9 +2,9 @@ import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
-import { addChannel } from '../../features/chat/chatSlice';
+import { renameChannel } from '../../../features/chat/chatSlice.js';
 
-const AddChannelModal = ({ onClose }) => {
+const RenameChannelModal = ({ channelId, currentName, onClose }) => {
   const dispatch = useDispatch();
   const { channels } = useSelector((state) => state.chat);
 
@@ -14,12 +14,12 @@ const AddChannelModal = ({ onClose }) => {
       .max(20, 'Максимум 20 символов')
       .required('Обязательное поле')
       .test('unique-name', 'Должно быть уникальным', (value) => {
-        return !channels.some((channel) => channel.name === value);
+        return !channels.some((channel) => channel.name === value && channel.id !== channelId);
       }),
   });
 
   const handleSubmit = (values, { setSubmitting }) => {
-    dispatch(addChannel(values.name))
+    dispatch(renameChannel({ id: channelId, name: values.name }))
       .then(() => {
         setSubmitting(false);
         onClose();
@@ -31,12 +31,12 @@ const AddChannelModal = ({ onClose }) => {
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="modal-header">
-            <div className="modal-title h4">Добавить канал</div>
+            <div className="modal-title h4">Переименовать канал</div>
             <button type="button" className="btn-close" onClick={onClose}></button>
           </div>
           <div className="modal-body">
             <Formik
-              initialValues={{ name: '' }}
+              initialValues={{ name: currentName }}
               validationSchema={validationSchema}
               onSubmit={handleSubmit}
             >
@@ -84,4 +84,4 @@ const AddChannelModal = ({ onClose }) => {
   );
 };
 
-export default AddChannelModal;
+export default RenameChannelModal;

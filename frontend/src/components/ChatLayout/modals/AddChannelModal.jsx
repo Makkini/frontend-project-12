@@ -2,9 +2,9 @@ import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
-import { renameChannel } from '../../features/chat/chatSlice';
+import { addChannel } from '../../../features/chat/chatSlice.js';
 
-const RenameChannelModal = ({ channelId, currentName, onClose }) => {
+const AddChannelModal = ({ onClose }) => {
   const dispatch = useDispatch();
   const { channels } = useSelector((state) => state.chat);
 
@@ -14,12 +14,12 @@ const RenameChannelModal = ({ channelId, currentName, onClose }) => {
       .max(20, 'Максимум 20 символов')
       .required('Обязательное поле')
       .test('unique-name', 'Должно быть уникальным', (value) => {
-        return !channels.some((channel) => channel.name === value && channel.id !== channelId);
+        return !channels.some((channel) => channel.name === value);
       }),
   });
 
   const handleSubmit = (values, { setSubmitting }) => {
-    dispatch(renameChannel({ id: channelId, name: values.name }))
+    dispatch(addChannel(values.name))
       .then(() => {
         setSubmitting(false);
         onClose();
@@ -31,12 +31,12 @@ const RenameChannelModal = ({ channelId, currentName, onClose }) => {
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="modal-header">
-            <div className="modal-title h4">Переименовать канал</div>
+            <div className="modal-title h4">Добавить канал</div>
             <button type="button" className="btn-close" onClick={onClose}></button>
           </div>
           <div className="modal-body">
             <Formik
-              initialValues={{ name: currentName }}
+              initialValues={{ name: '' }}
               validationSchema={validationSchema}
               onSubmit={handleSubmit}
             >
@@ -84,4 +84,4 @@ const RenameChannelModal = ({ channelId, currentName, onClose }) => {
   );
 };
 
-export default RenameChannelModal;
+export default AddChannelModal;

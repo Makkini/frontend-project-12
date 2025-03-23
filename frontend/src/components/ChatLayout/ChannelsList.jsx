@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { setCurrentChannel } from '../../features/chat/chatSlice';
-import AddChannelModal from './AddChannelModal';
-import RenameChannelModal from './RenameChannelModal';
-import DeleteChannelModal from './DeleteChannelModal';
+import AddChannelModal from './modals/AddChannelModal.jsx';
+import RenameChannelModal from './modals/RenameChannelModal.jsx';
+import DeleteChannelModal from './modals/DeleteChannelModal.jsx';
 
 const ChannelsList = ({ channels, currentChannelId }) => {
   const dispatch = useDispatch();

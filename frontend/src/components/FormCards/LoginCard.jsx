@@ -1,10 +1,15 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import avatar from '../../assets/images/avatar.jpg';
-import {Link} from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../../features/auth/authSlice';
+import { Link, useNavigate } from 'react-router-dom';
+import avatar from "../../assets/images/avatar.jpg"
+const LoginCard = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { loading, error } = useSelector((state) => state.auth);
 
-const LoginCard = ({ onSubmit, error }) => {
   const initialValues = {
     username: '',
     password: '',
@@ -15,11 +20,22 @@ const LoginCard = ({ onSubmit, error }) => {
     password: Yup.string().required('Обязательное поле'),
   });
 
+  const onSubmit = (values) => {
+    dispatch(loginUser(values))
+      .unwrap()
+      .then(() => {
+        navigate('/');
+      })
+      .catch((err) => {
+        console.error('Ошибка входа:', err);
+      });
+  };
+
   return (
     <div className="card shadow-sm">
-      <div className="card-body row p-4">
+      <div className="card-body row p-5">
         <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
-          <img src={avatar} className="rounded-circle" alt="Войти" />
+          <img src={avatar} className="rounded-circle" alt="Вход" />
         </div>
         <Formik
           initialValues={initialValues}
@@ -27,17 +43,17 @@ const LoginCard = ({ onSubmit, error }) => {
           onSubmit={onSubmit}
         >
           <Form className="col-12 col-md-6 mt-3 mt-md-0">
-            <h1 className="text-center mb-4">Войти</h1>
-            {error && <div className="alert alert-danger">{error}</div>}
+            <h1 className="text-center mb-4">Вход</h1>
+            {error && <div className="alert alert-danger">{error.message}</div>}
             <div className="form-floating mb-3">
               <Field
                 name="username"
                 type="text"
                 className="form-control"
-                placeholder="Ваш ник"
+                placeholder="Имя пользователя"
                 id="username"
               />
-              <label htmlFor="username">Ваш ник</label>
+              <label htmlFor="username">Имя пользователя</label>
               <ErrorMessage name="username" component="div" className="text-danger" />
             </div>
             <div className="form-floating mb-4">
@@ -51,15 +67,15 @@ const LoginCard = ({ onSubmit, error }) => {
               <label htmlFor="password">Пароль</label>
               <ErrorMessage name="password" component="div" className="text-danger" />
             </div>
-            <button type="submit" className="w-100 mb-3 btn btn-outline-primary">
-              Войти
+            <button type="submit" className="w-100 mb-3 btn btn-outline-primary" disabled={loading}>
+              {loading ? 'Загрузка...' : 'Войти'}
             </button>
           </Form>
         </Formik>
       </div>
       <div className="card-footer p-4">
         <div className="text-center">
-          <span>Нет аккаунта?</span> <Link to="/signup">Регистрация</Link>
+          <span>Нет аккаунта?</span> <Link to="/signup">Зарегистрироваться</Link>
         </div>
       </div>
     </div>

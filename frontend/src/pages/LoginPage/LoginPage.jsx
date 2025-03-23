@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { login } from '../../features/auth/authSlice';
 import LoginCard from '../../components/FormCards/LoginCard.jsx';
+import {loginUser} from "../../features/auth/authSlice.js";
 
 const LoginPage = () => {
   const [error, setError] = useState('');
@@ -14,7 +14,7 @@ const LoginPage = () => {
     try {
       const response = await axios.post('/api/v1/login', values);
       const { token, username } = response.data;
-      dispatch(login({ token, username }));
+      dispatch(loginUser({ token, username }));
       navigate('/');
     } catch (err) {
       setError('Неверные имя пользователя или пароль');

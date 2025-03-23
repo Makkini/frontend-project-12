@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { removeChannel } from '../../features/chat/chatSlice';
+import { removeChannel } from '../../../features/chat/chatSlice.js';
 
 const DeleteChannelModal = ({ channelId, onClose }) => {
   const dispatch = useDispatch();
