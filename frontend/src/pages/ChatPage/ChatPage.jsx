@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addMessage, fetchMessages, sendMessage, fetchChannels } from '../../features/chat/chatSlice';
+import {addMessage, fetchMessages, sendMessage, fetchChannels } from '../../features/chat/chatSlice';
 import ChannelsList from '../../components/ChatLayout/ChannelsList.jsx';
 import MessagesBox from '../../components/ChatLayout/MessagesBox.jsx';
 import socket from '../../services/socket.js';
@@ -43,6 +43,8 @@ const ChatPage = () => {
   if (error) {
     return <div>Ошибка: {error}</div>;
   }
+
+
 
   return (
     <div className="container my-4 overflow-hidden rounded shadow" style={{ height: '85vh' }}>

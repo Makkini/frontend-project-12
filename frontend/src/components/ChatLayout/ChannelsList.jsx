@@ -1,11 +1,62 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch } from 'react-redux';
+import { setCurrentChannel } from '../../features/chat/chatSlice';
+import AddChannelModal from './AddChannelModal';
+import RenameChannelModal from './RenameChannelModal';
+import DeleteChannelModal from './DeleteChannelModal';
 
 const ChannelsList = ({ channels, currentChannelId }) => {
+  const dispatch = useDispatch();
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isRenameModalOpen, setIsRenameModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [selectedChannel, setSelectedChannel] = useState(null);
+  const [openDropdownId, setOpenDropdownId] = useState(null);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpenDropdownId(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const handleChannelClick = (id) => {
+    dispatch(setCurrentChannel(id));
+    setOpenDropdownId(null);
+  };
+
+  const handleOpenRenameModal = (channel) => {
+    setSelectedChannel(channel);
+    setIsRenameModalOpen(true);
+    setOpenDropdownId(null);
+  };
+
+  const handleOpenDeleteModal = (channel) => {
+    setSelectedChannel(channel);
+    setIsDeleteModalOpen(true);
+    setOpenDropdownId(null);
+  };
+
+  const toggleDropdown = (channelId) => {
+    setOpenDropdownId(openDropdownId === channelId ? null : channelId);
+  };
+
   return (
     <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
       <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
         <b>Каналы</b>
-        <button type="button" className="p-0 text-primary btn btn-group-vertical">
+        <button
+          type="button"
+          className="p-0 text-primary btn btn-group-vertical"
+          onClick={() => setIsAddModalOpen(true)}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 16 16"
@@ -22,16 +73,65 @@ const ChannelsList = ({ channels, currentChannelId }) => {
       <ul id="channels-box" className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
         {channels.map((channel) => (
           <li key={channel.id} className="nav-item w-100">
-            <button
-              type="button"
-              className={`w-100 rounded-0 text-start btn ${channel.id === currentChannelId ? 'btn-secondary' : ''}`}
-            >
-              <span className="me-1">#</span>
-              {channel.name}
-            </button>
+            <div role="group" className="d-flex dropdown btn-group" ref={dropdownRef}>
+              <button
+                type="button"
+                className={`w-100 rounded-0 text-start text-truncate btn ${
+                  channel.id === currentChannelId ? 'btn-secondary' : ''
+                }`}
+                onClick={() => handleChannelClick(channel.id)}
+              >
+                <span className="me-1">#</span>
+                {channel.name}
+              </button>
+              {channel.removable && (
+                <>
+                  <button
+                    type="button"
+                    className={`flex-grow-0 dropdown-toggle dropdown-toggle-split btn ${
+                      channel.id === currentChannelId ? 'btn-secondary' : ''
+                    }`}
+                    onClick={() => toggleDropdown(channel.id)}
+                  >
+                    <span className="visually-hidden">Управление каналом</span>
+                  </button>
+                  {openDropdownId === channel.id && (
+                    <div className="dropdown-menu show">
+                      <button
+                        className="dropdown-item"
+                        onClick={() => handleOpenRenameModal(channel)}
+                      >
+                        Переименовать
+                      </button>
+                      <button
+                        className="dropdown-item"
+                        onClick={() => handleOpenDeleteModal(channel)}
+                      >
+                        Удалить
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
           </li>
         ))}
       </ul>
+
+      {isAddModalOpen && <AddChannelModal onClose={() => setIsAddModalOpen(false)} />}
+      {isRenameModalOpen && (
+        <RenameChannelModal
+          channelId={selectedChannel?.id}
+          currentName={selectedChannel?.name}
+          onClose={() => setIsRenameModalOpen(false)}
+        />
+      )}
+      {isDeleteModalOpen && (
+        <DeleteChannelModal
+          channelId={selectedChannel?.id}
+          onClose={() => setIsDeleteModalOpen(false)}
+        />
+      )}
     </div>
   );
 };

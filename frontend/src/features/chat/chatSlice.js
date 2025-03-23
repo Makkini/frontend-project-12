@@ -40,6 +40,45 @@ export const sendMessage = createAsyncThunk(
   },
 );
 
+export const addChannel = createAsyncThunk(
+  'chat/addChannel',
+  async (name, { getState }) => {
+    const { token } = getState().auth;
+    const response = await axios.post('/api/v1/channels', { name }, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  },
+);
+
+export const removeChannel = createAsyncThunk(
+  'chat/removeChannel',
+  async (id, { getState }) => {
+    const { token } = getState().auth;
+    await axios.delete(`/api/v1/channels/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return id;
+  },
+);
+
+export const renameChannel = createAsyncThunk(
+  'chat/renameChannel',
+  async ({ id, name }, { getState }) => {
+    const { token } = getState().auth;
+    const response = await axios.patch(`/api/v1/channels/${id}`, { name }, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  },
+);
+
 const chatSlice = createSlice({
   name: 'chat',
   initialState: {
@@ -89,11 +128,27 @@ const chatSlice = createSlice({
       })
       .addCase(sendMessage.fulfilled, (state, action) => {
         state.loading = false;
-        state.messages.push(action.payload); // Добавляем новое сообщение в состояние
+        state.messages.push(action.payload);
       })
       .addCase(sendMessage.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+      })
+      .addCase(addChannel.fulfilled, (state, action) => {
+        state.channels.push(action.payload);
+        state.currentChannelId = action.payload.id;
+      })
+      .addCase(removeChannel.fulfilled, (state, action) => {
+        state.channels = state.channels.filter((channel) => channel.id !== action.payload);
+        if (state.currentChannelId === action.payload) {
+          state.currentChannelId = '1';
+        }
+      })
+      .addCase(renameChannel.fulfilled, (state, action) => {
+        const channel = state.channels.find((ch) => ch.id === action.payload.id);
+        if (channel) {
+          channel.name = action.payload.name;
+        }
       });
   },
 });
