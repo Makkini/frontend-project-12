@@ -2,18 +2,20 @@ import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { renameChannel } from '../../../features/chat/chatSlice.js';
 
 const RenameChannelModal = ({ channelId, currentName, onClose }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { channels } = useSelector((state) => state.chat);
 
   const validationSchema = Yup.object({
     name: Yup.string()
-      .min(3, 'Минимум 3 символа')
-      .max(20, 'Максимум 20 символов')
-      .required('Обязательное поле')
-      .test('unique-name', 'Должно быть уникальным', (value) => {
+      .min(3, t('channels.minMaxError'))
+      .max(20, t('channels.minMaxError'))
+      .required(t('channels.required'))
+      .test('unique-name', t('channels.uniqueError'), (value) => {
         return !channels.some((channel) => channel.name === value && channel.id !== channelId);
       }),
   });
@@ -31,7 +33,7 @@ const RenameChannelModal = ({ channelId, currentName, onClose }) => {
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="modal-header">
-            <div className="modal-title h4">Переименовать канал</div>
+            <div className="modal-title h4">{t('channels.rename')}</div>
             <button type="button" className="btn-close" onClick={onClose}></button>
           </div>
           <div className="modal-body">
@@ -49,9 +51,6 @@ const RenameChannelModal = ({ channelId, currentName, onClose }) => {
                         errors.name && touched.name ? 'is-invalid' : ''
                       }`}
                     />
-                    <label className="visually-hidden" htmlFor="name">
-                      Имя канала
-                    </label>
                     <ErrorMessage
                       name="name"
                       component="div"
@@ -64,14 +63,14 @@ const RenameChannelModal = ({ channelId, currentName, onClose }) => {
                       className="me-2 btn btn-secondary"
                       onClick={onClose}
                     >
-                      Отменить
+                      {t('channels.cancel')}
                     </button>
                     <button
                       type="submit"
                       className="btn btn-primary"
                       disabled={isSubmitting}
                     >
-                      Отправить
+                      {t('channels.submit')}
                     </button>
                   </div>
                 </Form>

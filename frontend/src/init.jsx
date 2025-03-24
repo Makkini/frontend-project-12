@@ -2,9 +2,10 @@ import i18next from 'i18next';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 import App from './App.jsx';
 import resources from './locales/index.js';
-import {BrowserRouter} from "react-router-dom";
-import {Provider} from "react-redux";
-import store from "./app/store.js"
+import { BrowserRouter } from "react-router-dom";
+import { Provider } from "react-redux";
+import store from "./app/store.js";
+
 const init = async () => {
   const i18n = i18next.createInstance();
 
@@ -12,7 +13,11 @@ const init = async () => {
     .use(initReactI18next)
     .init({
       resources,
+      lng: 'ru',
       fallbackLng: 'ru',
+      interpolation: {
+        escapeValue: false
+      },
     });
 
   return (
@@ -23,7 +28,6 @@ const init = async () => {
         </I18nextProvider>
       </BrowserRouter>
     </Provider>
-
   );
 };
 

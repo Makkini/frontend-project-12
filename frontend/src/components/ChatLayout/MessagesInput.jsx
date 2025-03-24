@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import {useTranslation} from "react-i18next";
 
 const MessageInput = ({ onSendMessage }) => {
+  const {t} = useTranslation();
   const [message, setMessage] = useState('');
 
   const handleSubmit = (e) => {
@@ -17,8 +19,8 @@ const MessageInput = ({ onSendMessage }) => {
         <div className="input-group has-validation">
           <input
             name="body"
-            aria-label="Новое сообщение"
-            placeholder="Введите сообщение..."
+            aria-label={t('messages.labelMessageInput')}
+            placeholder={t('messages.newMessage')}
             className="border-0 p-0 ps-2 form-control"
             value={message}
             onChange={(e) => setMessage(e.target.value)}

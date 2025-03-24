@@ -10,7 +10,7 @@ export const registerUser = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
-  }
+  },
 );
 
 export const loginUser = createAsyncThunk(
@@ -22,7 +22,7 @@ export const loginUser = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
-  }
+  },
 );
 
 const authSlice = createSlice({

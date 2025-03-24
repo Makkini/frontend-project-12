@@ -1,5 +1,7 @@
-import ru from './ru.js';
+import ru from './ru/ru.js';
 
 export default {
-  ru,
+  ru: {
+    translation: ru,
+  },
 };

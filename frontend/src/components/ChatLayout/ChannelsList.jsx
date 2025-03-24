@@ -4,8 +4,11 @@ import { setCurrentChannel } from '../../features/chat/chatSlice';
 import AddChannelModal from './modals/AddChannelModal.jsx';
 import RenameChannelModal from './modals/RenameChannelModal.jsx';
 import DeleteChannelModal from './modals/DeleteChannelModal.jsx';
+import {useTranslation} from "react-i18next";
 
 const ChannelsList = ({ channels, currentChannelId }) => {
+  const { t } = useTranslation();
+
   const dispatch = useDispatch();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isRenameModalOpen, setIsRenameModalOpen] = useState(false);
@@ -51,7 +54,7 @@ const ChannelsList = ({ channels, currentChannelId }) => {
   return (
     <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
       <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
-        <b>Каналы</b>
+        <b>{t('channels.title')}</b>
         <button
           type="button"
           className="p-0 text-primary btn btn-group-vertical"
@@ -93,7 +96,7 @@ const ChannelsList = ({ channels, currentChannelId }) => {
                     }`}
                     onClick={() => toggleDropdown(channel.id)}
                   >
-                    <span className="visually-hidden">Управление каналом</span>
+                    <span className="visually-hidden">{t('channels.manage')}</span>
                   </button>
                   {openDropdownId === channel.id && (
                     <div className="dropdown-menu show">
@@ -101,13 +104,13 @@ const ChannelsList = ({ channels, currentChannelId }) => {
                         className="dropdown-item"
                         onClick={() => handleOpenRenameModal(channel)}
                       >
-                        Переименовать
+                        {t('channels.renameAction')}
                       </button>
                       <button
                         className="dropdown-item"
                         onClick={() => handleOpenDeleteModal(channel)}
                       >
-                        Удалить
+                        {t('channels.deleteAction')}
                       </button>
                     </div>
                   )}

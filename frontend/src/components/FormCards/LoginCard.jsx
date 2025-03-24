@@ -5,7 +5,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../features/auth/authSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import avatar from "../../assets/images/avatar.jpg"
+import {useTranslation} from "react-i18next";
 const LoginCard = () => {
+  const { t } = useTranslation();
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error } = useSelector((state) => state.auth);
@@ -16,8 +19,8 @@ const LoginCard = () => {
   };
 
   const validationSchema = Yup.object({
-    username: Yup.string().required('Обязательное поле'),
-    password: Yup.string().required('Обязательное поле'),
+    username: Yup.string().required(t('validation.required')),
+    password: Yup.string().required(t('validation.required')),
   });
 
   const onSubmit = (values) => {
@@ -43,8 +46,8 @@ const LoginCard = () => {
           onSubmit={onSubmit}
         >
           <Form className="col-12 col-md-6 mt-3 mt-md-0">
-            <h1 className="text-center mb-4">Вход</h1>
-            {error && <div className="alert alert-danger">{error.message}</div>}
+            <h1 className="text-center mb-4">{t('login.title')}</h1>
+            {error && <div className="alert alert-danger">{t('login.error')}</div>}
             <div className="form-floating mb-3">
               <Field
                 name="username"
@@ -53,7 +56,7 @@ const LoginCard = () => {
                 placeholder="Имя пользователя"
                 id="username"
               />
-              <label htmlFor="username">Имя пользователя</label>
+              <label htmlFor="username">{t('login.username')}</label>
               <ErrorMessage name="username" component="div" className="text-danger" />
             </div>
             <div className="form-floating mb-4">
@@ -64,18 +67,18 @@ const LoginCard = () => {
                 placeholder="Пароль"
                 id="password"
               />
-              <label htmlFor="password">Пароль</label>
+              <label htmlFor="password">{t('login.password')}</label>
               <ErrorMessage name="password" component="div" className="text-danger" />
             </div>
             <button type="submit" className="w-100 mb-3 btn btn-outline-primary" disabled={loading}>
-              {loading ? 'Загрузка...' : 'Войти'}
+              {loading ? t('loading') : t('login.submit')}
             </button>
           </Form>
         </Formik>
       </div>
       <div className="card-footer p-4">
         <div className="text-center">
-          <span>Нет аккаунта?</span> <Link to="/signup">Зарегистрироваться</Link>
+          <span>{t('login.noAccount')}</span> <Link to="/signup">{t('login.register')}</Link>
         </div>
       </div>
     </div>
