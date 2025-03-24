@@ -4,13 +4,11 @@ import {addMessage, fetchMessages, sendMessage, fetchChannels } from '../../feat
 import ChannelsList from '../../components/ChatLayout/ChannelsList.jsx';
 import MessagesBox from '../../components/ChatLayout/MessagesBox.jsx';
 import socket from '../../services/socket.js';
-import {useTranslation} from "react-i18next";
 
 const ChatPage = () => {
-  const { t } = useTranslation();
 
   const dispatch = useDispatch();
-  const { messages, channels, currentChannelId, loading, error } = useSelector((state) => state.chat);
+  const { messages, channels, currentChannelId } = useSelector((state) => state.chat);
   const { username } = useSelector((state) => state.auth)
   useEffect(() => {
     dispatch(fetchChannels());
@@ -38,16 +36,6 @@ const ChatPage = () => {
     };
     dispatch(sendMessage(message));
   };
-
-  if (loading) {
-    return <div>{t('loading')}</div>;
-  }
-
-  if (error) {
-    return <div>{t('error', {error})}</div>;
-  }
-
-
 
   return (
     <div className="container my-4 overflow-hidden rounded shadow" style={{ height: '85vh' }}>

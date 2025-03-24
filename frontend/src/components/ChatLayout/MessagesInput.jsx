@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import {useTranslation} from "react-i18next";
+import React, { useState, useRef, useEffect } from 'react';
+import { useTranslation } from "react-i18next";
 
 const MessageInput = ({ onSendMessage }) => {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const [message, setMessage] = useState('');
+  const inputRef = useRef(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -13,11 +14,18 @@ const MessageInput = ({ onSendMessage }) => {
     }
   };
 
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  });
+
   return (
     <div className="mt-auto px-5 py-3">
       <form onSubmit={handleSubmit} className="py-1 border rounded-2">
         <div className="input-group has-validation">
           <input
+            ref={inputRef}
             name="body"
             aria-label={t('messages.labelMessageInput')}
             placeholder={t('messages.newMessage')}
