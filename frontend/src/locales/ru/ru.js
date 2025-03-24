@@ -27,6 +27,8 @@ export default {
   },
   validation: {
     required: 'Обязательное поле',
+    "noProfanity": "Недопустимое слово в тексте"
+
   },
   channels: {
     title: 'Каналы',
@@ -58,6 +60,8 @@ export default {
     "channelCreated": "Канал создан",
     "channelRenamed": "Канал переименован",
     "channelRemoved": "Канал удалён",
-    "networkError": "Ошибка сети. Проверьте подключение."
-  }
+    "networkError": "Ошибка сети. Проверьте подключение.",
+    "profanityWarning": "Сообщение содержит недопустимые слова"
+
+  },
 };

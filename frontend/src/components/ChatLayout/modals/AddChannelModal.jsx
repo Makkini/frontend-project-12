@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { addChannel } from '../../../features/chat/chatSlice.js';
+import {filterProfanity, hasProfanity} from "../../../services/profanityFilter.js";
 
 const AddChannelModal = ({ onClose,  onSuccess, onError }) => {
   const { t } = useTranslation();
@@ -15,21 +16,24 @@ const AddChannelModal = ({ onClose,  onSuccess, onError }) => {
       .min(3, t('channels.minMaxError'))
       .max(20, t('channels.minMaxError'))
       .required(t('channels.required'))
+      .test('no-profanity', t('validation.noProfanity'), (value) => !hasProfanity(value))
       .test('unique-name', t('channels.uniqueError'), (value) => {
         return !channels.some((channel) => channel.name === value);
       }),
   });
 
-  const handleSubmit = async (values, { setSubmitting }) => {
-    try {
-      await dispatch(addChannel(values.name)).unwrap();
-      onSuccess();
-      onClose();
-    } catch (err) {
-      onError(err.message);
-    } finally {
-      setSubmitting(false);
-    }
+  const handleSubmit = (values, { setSubmitting }) => {
+    const filteredName = filterProfanity(values.name);
+    dispatch(addChannel(filteredName))
+      .then(() => {
+        onSuccess();
+        setSubmitting(false);
+        onClose();
+      })
+      .catch((error) => {
+        onError(error.message);
+        setSubmitting(false);
+      });
   };
 
   return (

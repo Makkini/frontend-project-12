@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from "react-i18next";
+import {filterProfanity} from "../../services/profanityFilter.js";
 
 const MessageInput = ({ onSendMessage }) => {
   const { t } = useTranslation();
@@ -8,12 +9,14 @@ const MessageInput = ({ onSendMessage }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (message.trim()) {
-      onSendMessage(message);
-      setMessage('');
-    }
-  };
+    const trimmedMessage = message.trim();
 
+    if (!trimmedMessage) return;
+
+    const filteredMessage = filterProfanity(trimmedMessage);
+    onSendMessage(filteredMessage);
+    setMessage('');
+  };
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();

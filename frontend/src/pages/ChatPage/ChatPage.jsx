@@ -4,6 +4,7 @@ import {addMessage, fetchMessages, sendMessage, fetchChannels } from '../../feat
 import ChannelsList from '../../components/ChatLayout/ChannelsList.jsx';
 import MessagesBox from '../../components/ChatLayout/MessagesBox.jsx';
 import socket from '../../services/socket.js';
+import {filterProfanity} from "../../services/profanityFilter.js";
 
 const ChatPage = () => {
 
@@ -28,13 +29,19 @@ const ChatPage = () => {
     };
   }, [dispatch]);
 
-  const handleSendMessage = (messageBody) => {
+  const handleSendMessage = async (messageBody) => {
+    const filteredBody = filterProfanity(messageBody);
     const message = {
-      body: messageBody,
+      body: filteredBody,
       channelId: currentChannelId,
       username: username,
     };
-    dispatch(sendMessage(message));
+
+    try {
+      await dispatch(sendMessage(message)).unwrap();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
