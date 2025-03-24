@@ -1,5 +1,4 @@
 export default {
-  loading: 'Загрузка...',
   error: 'Ошибка: {{error}}',
   notFound: 'Страница не найдена',
   navbar: {
@@ -55,4 +54,10 @@ export default {
     newMessage: 'Введите сообщение...',
     labelMessageInput: 'Новое сообщение',
   },
+  notifications: {
+    "channelCreated": "Канал создан",
+    "channelRenamed": "Канал переименован",
+    "channelRemoved": "Канал удалён",
+    "networkError": "Ошибка сети. Проверьте подключение."
+  }
 };

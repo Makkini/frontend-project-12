@@ -3,13 +3,18 @@ import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { removeChannel } from '../../../features/chat/chatSlice.js';
 
-const DeleteChannelModal = ({ channelId, onClose }) => {
+const DeleteChannelModal = ({ channelId, onClose, onError, onSuccess }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const handleDelete = () => {
-    dispatch(removeChannel(channelId));
-    onClose();
+  const handleDelete = async () => {
+    try {
+      await dispatch(removeChannel(channelId)).unwrap();
+      onSuccess();
+      onClose();
+    } catch (err) {
+      onError(err.message);
+    }
   };
 
   return (

@@ -5,6 +5,7 @@ import AddChannelModal from './modals/AddChannelModal.jsx';
 import RenameChannelModal from './modals/RenameChannelModal.jsx';
 import DeleteChannelModal from './modals/DeleteChannelModal.jsx';
 import {useTranslation} from "react-i18next";
+import {toast} from "react-toastify";
 
 const ChannelsList = ({ channels, currentChannelId }) => {
   const { t } = useTranslation();
@@ -121,18 +122,28 @@ const ChannelsList = ({ channels, currentChannelId }) => {
         ))}
       </ul>
 
-      {isAddModalOpen && <AddChannelModal onClose={() => setIsAddModalOpen(false)} />}
+      {isAddModalOpen && (
+        <AddChannelModal
+          onClose={() => setIsAddModalOpen(false)}
+          onSuccess={() => toast.success(t('notifications.channelCreated'))}
+          onError={(error) => toast.error(error || t('notifications.networkError'))}
+        />
+      )}
       {isRenameModalOpen && (
         <RenameChannelModal
           channelId={selectedChannel?.id}
           currentName={selectedChannel?.name}
           onClose={() => setIsRenameModalOpen(false)}
+          onSuccess={() => toast.success(t('notifications.channelRenamed'))}
+          onError={(error) => toast.error(error || t('notifications.networkError'))}
         />
       )}
       {isDeleteModalOpen && (
         <DeleteChannelModal
           channelId={selectedChannel?.id}
           onClose={() => setIsDeleteModalOpen(false)}
+          onSuccess={() => toast.success(t('notifications.channelRemoved'))}
+          onError={(error) => toast.error(error || t('notifications.networkError'))}
         />
       )}
     </div>

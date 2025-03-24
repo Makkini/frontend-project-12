@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { addChannel } from '../../../features/chat/chatSlice.js';
 
-const AddChannelModal = ({ onClose }) => {
+const AddChannelModal = ({ onClose,  onSuccess, onError }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { channels } = useSelector((state) => state.chat);
@@ -20,12 +20,16 @@ const AddChannelModal = ({ onClose }) => {
       }),
   });
 
-  const handleSubmit = (values, { setSubmitting }) => {
-    dispatch(addChannel(values.name))
-      .then(() => {
-        setSubmitting(false);
-        onClose();
-      });
+  const handleSubmit = async (values, { setSubmitting }) => {
+    try {
+      await dispatch(addChannel(values.name)).unwrap();
+      onSuccess();
+      onClose();
+    } catch (err) {
+      onError(err.message);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
