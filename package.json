@@ -4,17 +4,20 @@
   "description": "[![Actions Status](https://github.com/Makkini/frontend-project-12/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/Makkini/frontend-project-12/actions)",
   "main": "index.js",
   "scripts": {
-    "start": "npx start-server -s ./frontend/dist",
+    "start": "npx start-server ./frontend/dist",
     "test": "playwright test",
     "build": "cd frontend && npm run build"
+  },
+  "devDependencies": {
+    "serve": "^14.2.0",
+    "@playwright/test": "^1.42.1",
+    "start-server": "^0.0.4"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Makkini/frontend-project-12.git"
   },
-  "devDependencies": {
-    "start-server": "^0.0.4"
-  },
+
   "author": "makkinni",
   "license": "ISC",
   "bugs": {
