@@ -20,5 +20,4 @@ develop:
 	make start-backend & make start-frontend
 
 build:
-	rm -rf frontend/dist
-	npm run build
+	make -C frontend build
