@@ -12,6 +12,9 @@
     "type": "git",
     "url": "git+https://github.com/Makkini/frontend-project-12.git"
   },
+  "devDependencies": {
+    "start-server": "^0.0.4"
+  },
   "author": "makkinni",
   "license": "ISC",
   "bugs": {
