@@ -21,7 +21,9 @@ const RegistrationCard = () => {
 
   const validationSchema = Yup.object({
     username: Yup.string().required('Обязательное поле'),
-    password: Yup.string().required('Обязательное поле'),
+    password: Yup.string()
+      .required('Обязательное поле')
+      .min(6, 'Не менее 6 символов'),
     confirmPassword: Yup.string()
       .oneOf([Yup.ref('password'), null], 'Пароли должны совпадать')
       .required('Обязательное поле'),

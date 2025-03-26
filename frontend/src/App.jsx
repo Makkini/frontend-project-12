@@ -7,13 +7,13 @@ import NotFoundPage from "./pages/NotFoundPage/NotFoundPage.jsx";
 import Navbar from "./components/Navbar.jsx";
 import SignupPage from "./pages/SignupPage/SignupPage.jsx";
 import PrivateRoute from "./app/PrivateRoute.jsx";
-import { Provider, ErrorBoundary } from '@rollbar/react';
-import {rollbar} from "./services/rollbar.js";
+// import { Provider, ErrorBoundary } from '@rollbar/react';
+// import {rollbar} from "./services/rollbar.js";
 
 const App = () => {
   return (
-    <Provider instance={rollbar}>
-      <ErrorBoundary>
+    // <Provider instance={rollbar}>
+    //   <ErrorBoundary>
         <div className='h-100'>
           <Navbar />
           <Routes>
@@ -42,8 +42,8 @@ const App = () => {
             theme="light"
           />
         </div>
-      </ErrorBoundary>
-    </Provider>
+    //   </ErrorBoundary>
+    // </Provider>
   );
 };
 

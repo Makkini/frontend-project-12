@@ -1,7 +1,7 @@
 install:
 	npm ci
 
-server:
+start:
 	npx start-server -s ./dist
 
 build:
