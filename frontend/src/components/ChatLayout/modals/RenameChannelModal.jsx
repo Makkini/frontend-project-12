@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { renameChannel } from '../../../features/chat/chatSlice.js';
+import {hasProfanity} from "../../../services/profanityFilter.js";
 
 const RenameChannelModal = ({ channelId, currentName, onClose, onSuccess, onError }) => {
   const { t } = useTranslation();
@@ -14,6 +15,7 @@ const RenameChannelModal = ({ channelId, currentName, onClose, onSuccess, onErro
     name: Yup.string()
       .min(3, t('channels.minMaxError'))
       .max(20, t('channels.minMaxError'))
+      .test('no-profanity', t('validation.noProfanity'), (value) => !hasProfanity(value))
       .required(t('channels.required'))
       .test('unique-name', t('channels.uniqueError'), (value) => {
         return !channels.some((channel) => channel.name === value && channel.id !== channelId);
